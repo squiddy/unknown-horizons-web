@@ -1,4 +1,5 @@
-var ctx,
+var background_ctx,
+	foreground_ctx,
 	scale = 0.4,
 	texture,
 	tile_texture = {
@@ -32,13 +33,13 @@ function init_stats() {
 function init() {
 	init_stats();
 
-	var canvas = document.getElementById('canvas');
+	var canvas = document.getElementById('background');
 	canvas.width = document.width;
 	canvas.height = document.height;
 
-	ctx = canvas.getContext('2d');
-	ctx.fillStyle = "rgba(8,8,12,.65)";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	background_ctx = canvas.getContext('2d');
+	background_ctx.fillStyle = "#000";
+	background_ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 	load_assets();
 }
@@ -46,17 +47,22 @@ function init() {
 function load_assets() {
 	texture = new Image();
 	texture.src = 'res/base.png'
-	texture.onload = draw;
+	texture.onload = pre_draw;
+}
+
+function pre_draw() {
+	// draw once
+	draw_water(background_ctx);
+	draw_island(background_ctx);
+
+	draw();
 }
 
 function draw() {
-	draw_water();
-	draw_island();
-
-	//webkitRequestAnimationFrame(draw);
+	webkitRequestAnimationFrame(draw);
 }
 
-function draw_water() {
+function draw_water(ctx) {
 	var tex = sprites['deep/straight/45'];
 
 	for (var i = -1; i < 8; i++) {
@@ -71,7 +77,7 @@ function draw_water() {
 	}
 }
 
-function draw_island() {
+function draw_island(ctx) {
 	var origin = {x: 50, y: document.height / 2};
 
 	for (var i = 0, len = map.length; i < len; i++) {

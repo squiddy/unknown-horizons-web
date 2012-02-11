@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <style>
         * { padding:0; margin:0; }
-        canvas { display:block; } /* remove scrollbars */
+        canvas { display:block; position:absolute; z-index:0 }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
+    <canvas id="background" ></canvas>
+    <canvas id="foreground"></canvas>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="https://raw.github.com/mrdoob/stats.js/master/build/Stats.js"></script>
     <script type="text/javascript" src="res/map.js"></script>
