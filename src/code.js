@@ -2,27 +2,13 @@ var background_ctx,
 	foreground_ctx,
 	scale = 0.4,
 	base_texture,
-	tile_texture = {
-		1: 'beach-shallow',
-		2: 'shallow-deep',
-		3: 'grass',
-		4: 'grass-beach',
-		5: 'beach-shallow',
-		6: 'beach'
-	};
+	nature_texture,
+	building_texture;
 
-var BUILDINGS = {
-	17: ['trees/as_tupelo1/idle_full/45', 'trees/as_birch/idle_full/45', 'trees/as_maple1/idle_full/45',
-		 'trees/as_tupelo/idle_full/45', 'trees/as_maple2/idle_full/45', 'trees/as_spruce/idle_full/45',
-		 'trees/as_tupelo2/idle_full/45', 'trees/as_maple3/idle_full/45', 'trees/as_spruce1/idle_full/45'],
-	23: ['resources/as_clay/idle/45/1.png'],
-	33: ['fish'],
-	34: ['mountains/as_mountain5x5/idle/45']
-};
+TILE_WIDTH *= scale;
+TILE_HEIGHT *= scale;
 
 var origin = {x: 0, y: document.height / 2},
-	TILE_WIDTH = 64 * scale,
-	TILE_HEIGHT = 32 * scale,
 	DEBUG = false;
 
 
@@ -68,7 +54,7 @@ function load_assets() {
 	var loaded = 0;
 	function ready() {
 		loaded++;
-		if (loaded == 2) {
+		if (loaded == 3) {
 			pre_draw();
 		}
 	}
@@ -80,6 +66,10 @@ function load_assets() {
 	nature_texture = new Image();
 	nature_texture.src = 'res/nature.png'
 	nature_texture.onload = ready;
+
+	building_texture = new Image();
+	building_texture.src = 'res/building.png'
+	building_texture.onload = ready;
 }
 
 function pre_draw() {
@@ -135,7 +125,7 @@ function draw_island(ctx, island) {
 			tile_y = island[i][1],
 			tile_type = island[i][2];
 
-		var tex = sprites[tile_texture[tile_type] + '/' + island[i][3] + '/' + island[i][4]];
+		var tex = sprites[TILE_TEXTURE[tile_type] + '/' + island[i][3] + '/' + island[i][4]];
 
 		var x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2,
 			y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2 + TILE_HEIGHT / 2;
@@ -150,11 +140,25 @@ function draw_buildings(ctx, buildings) {
 			tile_x = buildings[i][1],
 			tile_y = buildings[i][2];
 
-		var texs = BUILDINGS[tile_type],
-			tex = nature_sprites[texs[Math.floor(Math.random() * texs.length)]];
+		var info = BUILDINGS[tile_type];
+		if (info === undefined) {
+			console.log('Unknown building: ' + tile_type);
+			continue;
+		}
+
+		var dx = info[0], dy = info[1], texs = info[2];
+		var tex_name = texs[Math.floor(Math.random() * texs.length)];
+		var tex = nature_sprites[tex_name];
+		var texture = nature_texture;
 
 		if (tex === undefined) {
-			continue;
+			console.log(tex_name + ' not found in nature, trying buildings');
+			tex = building_sprites[texs[Math.floor(Math.random() * texs.length)]];
+			texture = building_texture;
+			if (tex === undefined) {
+				console.log(tex_name + ' not found in buildings');
+				continue;
+			}
 		}
 
 		// why?
@@ -165,19 +169,12 @@ function draw_buildings(ctx, buildings) {
 			y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2;
 
 		if (DEBUG) draw_base(ctx, x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
-		if (tile_type === 34) {
-			if (DEBUG) draw_base(ctx, x, y, 5, 5, 'rgba(255, 255, 0, 0.5)');
-			y += 5 * TILE_HEIGHT / 2;
-		} else if (tile_type === 23) {
-			if (DEBUG) draw_base(ctx, x, y, 3, 3, 'rgba(255, 255, 0, 0.5)');
-			y += 3 * TILE_HEIGHT / 2;
-		} else {
-			if (DEBUG) draw_base(ctx, x, y, 1, 1, 'rgba(255, 255, 0, 0.5)');
-			y += 1 * TILE_HEIGHT / 2;
-		}
+		if (DEBUG) draw_base(ctx, x, y, dx, dy, 'rgba(255, 255, 0, 0.5)');
 
+		y += dy * TILE_HEIGHT / 2;
 		y -= tex.height * scale;
-		ctx.drawImage(nature_texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
+
+		ctx.drawImage(texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
 	}
 }
 
