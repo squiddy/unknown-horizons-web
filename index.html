@@ -4,20 +4,25 @@
     <meta charset="utf-8">
     <style>
         * { padding:0; margin:0; }
-        canvas { display:block; position:absolute; z-index:0 }
+        canvas { display:block; position:absolute; }
+        #background { z-index:0; }
+        #streets { z-index:1; }
+        #foreground { z-index:2; }
     </style>
 </head>
 <body>
-    <canvas id="background" ></canvas>
+    <canvas id="background"></canvas>
+    <canvas id="streets"></canvas>
     <canvas id="foreground"></canvas>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="https://raw.github.com/mrdoob/stats.js/master/build/Stats.js"></script>
     <script type="text/javascript" src="res/map.js"></script>
-    <script type="text/javascript" src="res/base.js"></script>
-    <script type="text/javascript" src="res/nature.js"></script>
-    <script type="text/javascript" src="res/building.js"></script>
+    <script type="text/javascript" src="res/textures/base.js"></script>
+    <script type="text/javascript" src="res/textures/nature.js"></script>
+    <script type="text/javascript" src="res/textures/building.js"></script>
     <script type="text/javascript" src="src/dragscroll.js"></script>
     <script type="text/javascript" src="src/constants.js"></script>
+    <script type="text/javascript" src="res/building_data.js"></script>
     <script type="text/javascript" src="src/code.js"></script>
 </body>
 </html>

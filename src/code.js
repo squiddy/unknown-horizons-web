@@ -1,4 +1,5 @@
 var background_ctx,
+	streets_ctx,
 	foreground_ctx,
 	scale = 1,
 	base_texture,
@@ -47,6 +48,13 @@ function init() {
 	foreground_ctx = canvas.getContext('2d');
 	foreground_ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+	canvas = document.getElementById('streets');
+	canvas.width = document.width * 2;
+	canvas.height = document.height * 2;
+
+	streets_ctx = canvas.getContext('2d');
+	streets_ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 	load_assets();
 }
 
@@ -60,15 +68,15 @@ function load_assets() {
 	}
 
 	base_texture = new Image();
-	base_texture.src = 'res/base.png'
+	base_texture.src = 'res/textures/base.png'
 	base_texture.onload = ready;
 
 	nature_texture = new Image();
-	nature_texture.src = 'res/nature.png'
+	nature_texture.src = 'res/textures/nature.png'
 	nature_texture.onload = ready;
 
 	building_texture = new Image();
-	building_texture.src = 'res/building.png'
+	building_texture.src = 'res/textures/building.png'
 	building_texture.onload = ready;
 }
 
@@ -77,7 +85,7 @@ function pre_draw() {
 	draw_water(background_ctx);
 	draw_island(background_ctx, map['islands'][0]['grounds']);
 	if (DEBUG) draw_grid(foreground_ctx);
-	draw_buildings(foreground_ctx, map['buildings']);
+	draw_buildings(map['buildings']);
 
 	draw();
 }
@@ -134,48 +142,57 @@ function draw_island(ctx, island) {
 	}
 }
 
-function draw_buildings(ctx, buildings) {
+function draw_buildings(buildings) {
 	for (var i = 0, len = buildings.length; i < len; i++) {
-		var tile_type = buildings[i][0],
-			tile_x = buildings[i][1],
-			tile_y = buildings[i][2];
+		var tile_type = buildings[i][0];
 
-		var info = BUILDINGS[tile_type];
-		if (info === undefined) {
-			console.log('Unknown building: ' + tile_type);
-			continue;
+		if (tile_type === 15) {
+			draw_building(streets_ctx, buildings[i]);
+		} else {
+			draw_building(foreground_ctx, buildings[i]);
 		}
-
-		var dx = info[0], dy = info[1], texs = info[2];
-		var tex_name = texs[Math.floor(Math.random() * texs.length)];
-		var tex = nature_sprites[tex_name];
-		var texture = nature_texture;
-
-		if (tex === undefined) {
-			console.log(tex_name + ' not found in nature, trying buildings');
-			tex = building_sprites[texs[Math.floor(Math.random() * texs.length)]];
-			texture = building_texture;
-			if (tex === undefined) {
-				console.log(tex_name + ' not found in buildings');
-				continue;
-			}
-		}
-
-		// why?
-		tile_x -= 1;
-		tile_y += 1;
-
-		var x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2,
-			y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2;
-
-		if (DEBUG) draw_base(ctx, x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
-		if (DEBUG) draw_base(ctx, x, y, dx, dy, 'rgba(255, 255, 0, 0.5)');
-
-		y += dy * TILE_HEIGHT / 2;
-		y -= tex.height * scale;
-
-		ctx.drawImage(texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
 	}
+}
+
+function draw_building(ctx, building) {
+	var tile_type = building[0],
+		tile_x = building[1],
+		tile_y = building[2];
+
+	var info = BUILDINGS[tile_type];
+	if (info === undefined) {
+		console.log('Unknown building: ' + tile_type);
+		return;
+	}
+
+	var tex_name = info.textures[Math.floor(Math.random() * info.textures.length)];
+	var tex = nature_sprites[tex_name];
+	var texture = nature_texture;
+
+	if (tex === undefined) {
+		console.log(tex_name + ' not found in nature, trying buildings');
+		tex = building_sprites[tex_name];
+		texture = building_texture;
+		if (tex === undefined) {
+			console.log(tex_name + ' not found in buildings');
+			return;
+		}
+	}
+
+	// why?
+	tile_x -= 1;
+	tile_y += 1;
+
+	var x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2,
+		y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2;
+
+	if (DEBUG) draw_base(ctx, x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
+	if (DEBUG) draw_base(ctx, x, y, info.size_x, info.size_y, 'rgba(255, 255, 0, 0.5)');
+
+	y += info.size_y * TILE_HEIGHT / 2;
+	y -= tex.height * scale;
+
+	ctx.drawImage(texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
 }
 
 function draw_base(ctx, x, y, width, height, color) {

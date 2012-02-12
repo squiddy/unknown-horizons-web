@@ -15,8 +15,20 @@ db = sqlite3.connect(sys.argv[1])
 cursor = db.cursor()
 
 # retrieve buildings
-cursor.execute('SELECT type, x, y FROM building')
-data['buildings'] = cursor.fetchall()
+cursor.execute('SELECT type, x, y FROM building ORDER BY x DESC, y ASC')
+result = cursor.fetchall()
+
+def s(a, b):
+    # sort X descending, Y ascending to help remove overlaps when rendering
+    # in order
+    if a[1] == b[1]:
+        return cmp(a[2], b[2])
+    else:
+        return cmp(b[1], a[1])
+
+result.sort(cmp=s)
+
+data['buildings'] = result
 
 # retrieve islands
 cursor.execute('SELECT x, y, file FROM island')
