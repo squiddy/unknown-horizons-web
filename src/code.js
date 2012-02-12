@@ -22,7 +22,8 @@ var BUILDINGS = {
 
 var origin = {x: 0, y: document.height / 2},
 	TILE_WIDTH = 64 * scale,
-	TILE_HEIGHT = 32 * scale;
+	TILE_HEIGHT = 32 * scale,
+	DEBUG = false;
 
 
 $(document).ready(init);
@@ -85,7 +86,7 @@ function pre_draw() {
 	// draw once
 	draw_water(background_ctx);
 	draw_island(background_ctx, map['islands'][0]['grounds']);
-	//draw_grid(foreground_ctx);
+	if (DEBUG) draw_grid(foreground_ctx);
 	draw_buildings(foreground_ctx, map['buildings']);
 
 	draw();
@@ -152,33 +153,41 @@ function draw_buildings(ctx, buildings) {
 		var texs = BUILDINGS[tile_type],
 			tex = nature_sprites[texs[Math.floor(Math.random() * texs.length)]];
 
-		// mountains
-		//tile_x -= 3;
-		//tile_y += 3;
-		// trees
-		tile_x -= 1;
-		tile_y += 1;
-
 		if (tex === undefined) {
 			continue;
 		}
 
+		// why?
+		tile_x -= 1;
+		tile_y += 1;
+
 		var x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2,
-			y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2 - tex.height * scale + TILE_HEIGHT / 2;
+			y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2;
 
+		if (DEBUG) draw_base(ctx, x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
+		if (tile_type === 34) {
+			if (DEBUG) draw_base(ctx, x, y, 5, 5, 'rgba(255, 255, 0, 0.5)');
+			y += 5 * TILE_HEIGHT / 2;
+		} else if (tile_type === 23) {
+			if (DEBUG) draw_base(ctx, x, y, 3, 3, 'rgba(255, 255, 0, 0.5)');
+			y += 3 * TILE_HEIGHT / 2;
+		} else {
+			if (DEBUG) draw_base(ctx, x, y, 1, 1, 'rgba(255, 255, 0, 0.5)');
+			y += 1 * TILE_HEIGHT / 2;
+		}
+
+		y -= tex.height * scale;
 		ctx.drawImage(nature_texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
-
-		/*
-		x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2;
-		y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2;
-		ctx.beginPath();
-		ctx.fillStyle = '#0ff';
-		ctx.moveTo(x,                  y);
-		ctx.lineTo(x + TILE_WIDTH / 2, y - TILE_HEIGHT / 2);
-		ctx.lineTo(x + TILE_WIDTH,     y);
-		ctx.lineTo(x + TILE_WIDTH / 2, y + TILE_HEIGHT / 2);
-		ctx.lineTo(x,                  y);
-		ctx.fill();
-		*/
 	}
+}
+
+function draw_base(ctx, x, y, width, height, color) {
+	ctx.beginPath();
+	ctx.fillStyle = color;
+	ctx.moveTo(x,                          y);
+	ctx.lineTo(x + width * TILE_WIDTH / 2, y - height * TILE_HEIGHT / 2);
+	ctx.lineTo(x + width * TILE_WIDTH,     y);
+	ctx.lineTo(x + width * TILE_WIDTH / 2, y + height * TILE_HEIGHT / 2);
+	ctx.lineTo(x,                          y);
+	ctx.fill();
 }
