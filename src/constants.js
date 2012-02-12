@@ -31,7 +31,9 @@ var BUILDINGS = {
 	 8: [1, 1, 
 	 	 ['sailors/lumberjack/as_lumberjack/idle/45']],
 	15: [1, 1,
-		 ['sailors/streets/as_trail/abcd/45']]
+		 ['sailors/streets/as_trail/abcd/45']],
+	 5: [1, 1,
+	 	 ['pioneers/church_wooden/as_church_wooden/idle/45']]
 	/*
 	STORAGE_CLASS = 2
 	RESIDENTIAL_CLASS = 3

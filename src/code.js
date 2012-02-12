@@ -1,6 +1,6 @@
 var background_ctx,
 	foreground_ctx,
-	scale = 0.4,
+	scale = 1,
 	base_texture,
 	nature_texture,
 	building_texture;
@@ -8,7 +8,7 @@ var background_ctx,
 TILE_WIDTH *= scale;
 TILE_HEIGHT *= scale;
 
-var origin = {x: 0, y: document.height / 2},
+var origin = {x: 0, y: document.height},
 	DEBUG = false;
 
 
@@ -33,16 +33,16 @@ function init() {
 	init_stats();
 
 	var canvas = document.getElementById('background');
-	canvas.width = document.width;
-	canvas.height = document.height;
+	canvas.width = document.width * 2;
+	canvas.height = document.height * 2;
 
 	background_ctx = canvas.getContext('2d');
 	background_ctx.fillStyle = "#000";
 	background_ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 	canvas = document.getElementById('foreground');
-	canvas.width = document.width;
-	canvas.height = document.height;
+	canvas.width = document.width * 2;
+	canvas.height = document.height * 2;
 
 	foreground_ctx = canvas.getContext('2d');
 	foreground_ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -88,8 +88,8 @@ function draw() {
 
 function draw_grid(ctx) {
 	ctx.strokeStyle = "#000";
-	for (var x = 0; x < document.width; x += TILE_WIDTH) {
-		for (var y = 0; y < document.height; y += TILE_HEIGHT) {
+	for (var x = 0; x < document.width * 2; x += TILE_WIDTH) {
+		for (var y = 0; y < document.height * 2; y += TILE_HEIGHT) {
 			ctx.moveTo(origin.x + x,              origin.y + y);
 			ctx.lineTo(origin.x + x + TILE_WIDTH, origin.y + y - TILE_HEIGHT);
 			ctx.moveTo(origin.x + x,              origin.y + y);
@@ -107,8 +107,8 @@ function draw_grid(ctx) {
 function draw_water(ctx) {
 	var tex = sprites['deep/straight/45'];
 
-	for (var i = -1; i < 8; i++) {
-		for (var j = -1; j < 8; j++) {
+	for (var i = -1; i < 16; i++) {
+		for (var j = -1; j < 16; j++) {
 			var x = j * tex.width * scale,
 				y = i * tex.height * scale;
 			ctx.drawImage(base_texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
