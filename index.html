@@ -8,9 +8,13 @@
         #background { z-index:0; }
         #streets { z-index:1; }
         #foreground { z-index:2; }
+        #tools { position:fixed; top:80px; left:0; z-index:999; }
     </style>
 </head>
 <body>
+    <div id="tools">
+        <label><input type="checkbox" name="grid" /> Grid</label>
+    </div>
     <canvas id="background"></canvas>
     <canvas id="streets"></canvas>
     <canvas id="foreground"></canvas>

@@ -72,7 +72,7 @@ var BUILDINGS = {
 	},
 	// storage tent
 	2: {
-		size_x: 1, size_y: 1,
+		size_x: 2, size_y: 2,
 	 	textures: ['sailors/storagetent/as_storagetent/idle/45']
 	},
 	// brickyard
@@ -89,5 +89,15 @@ var BUILDINGS = {
 	18: {
 		size_x: 3, size_y: 3,
 		textures: ['pioneers/agricultural/as_pasture/idle/45/0000.png']
+	},
+	// school
+	21: {
+		size_x: 2, size_y: 2,
+		textures: ['pioneers/school/as_school/idle/45']
+	},
+	// salt pond
+	35: {
+		size_x: 3, size_y: 3,
+		textures: ['settlers/salt_ponds/as_saltponds/idle/45']
 	}
 };

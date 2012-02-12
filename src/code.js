@@ -56,6 +56,17 @@ function init() {
 	streets_ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	load_assets();
+
+	$('input[name=grid]').change(function() {
+		DEBUG = $(this).is(':checked');
+		var w = document.width * 2,
+			h = document.height * 2;
+		foreground_ctx.clearRect(0, 0, w, h);
+		streets_ctx.clearRect(0, 0, w, h);
+
+		if (DEBUG) draw_grid(foreground_ctx);
+		draw_buildings(map['buildings']);
+	});
 }
 
 function load_assets() {
