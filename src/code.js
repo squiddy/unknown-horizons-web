@@ -20,7 +20,7 @@ function init_stats() {
 
     stats = new Stats();
     el = stats.getDomElement();
-    el.style.position = 'absolute';
+    el.style.position = 'fixed';
     el.style.left = '0px';
     el.style.top = '0px';
 

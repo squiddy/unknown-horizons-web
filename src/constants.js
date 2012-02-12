@@ -9,46 +9,52 @@ var TILE_TEXTURE = {
 
 var BUILDINGS = {
 	17: [1, 1, 
-	     ['trees/as_tupelo1/idle_full/45', 'trees/as_birch/idle_full/45',
+	     ['trees/as_tupelo1/idle_full/45', /*'trees/as_birch/idle_full/45',*/
 		  'trees/as_maple1/idle_full/45', 'trees/as_tupelo/idle_full/45',
 		  'trees/as_maple2/idle_full/45', 'trees/as_spruce/idle_full/45',
 		  'trees/as_tupelo2/idle_full/45', 'trees/as_maple3/idle_full/45',
 		  'trees/as_spruce1/idle_full/45']],
-	23: [2, 2,
+	23: [3, 3,
 	     ['resources/as_clay/idle/45/1.png']],
 	33: [2, 2,
 	     ['fish']],
 	34: [5, 5,
 		 ['mountains/as_mountain5x5/idle/45']],
-	 1: [2, 2,
+	 1: [3, 3,
 	 	 ['sailors/warehouse/as_warehouse/idle/45']],
-	 4: [4, 4,
+	 4: [6, 6,
 	 	 ['sailors/mainsquare/as_mainsquare/idle/45']],
-	 3: [1, 1,
+	 3: [2, 2,
 	 	 ['pioneers/residential/as_hut/idle/45']],
-	11: [1, 1,
+	11: [2, 2,
 		 ['sailors/fisherman/as_fisherman/idle/45']],
-	 8: [1, 1, 
+	 8: [2, 2, 
 	 	 ['sailors/lumberjack/as_lumberjack/idle/45']],
 	15: [1, 1,
 		 ['sailors/streets/as_trail/abcd/45']],
-	 5: [1, 1,
-	 	 ['pioneers/church_wooden/as_church_wooden/idle/45']]
+	 5: [2, 2,
+	 	 ['pioneers/church_wooden/as_church_wooden/idle/45']],
+	 6: [1, 1,
+	 	 ['sailors/signalfire/as_signalfire/idle/45']],
+	 9: [2, 2,
+	 	 ['sailors/hunter/as_hunter/idle/45']],
+	 2: [1, 1,
+	 	 ['sailors/storagetent/as_storagetent/idle/45']],
+	24: [2, 4,
+		 ['pioneers/brickyard/as_brickyard/idle/45']],
+	20: [2, 2,
+		 ['pioneers/farm/as_farm/idle/45']],
+	18: [2, 2,
+		 ['pioneers/agricultural/as_pasture/idle/45/0000.png']]
 	/*
-	STORAGE_CLASS = 2
 	RESIDENTIAL_CLASS = 3
-	PAVILION_CLASS = 5
-	SIGNAL_FIRE_CLASS = 6
 	WEAVER_CLASS = 7
-	HUNTER_CLASS = 9
 	SETTLER_RUIN_CLASS = 10
 	BOATBUILDER_CLASS = 12
 	PASTURE_CLASS = 18
 	POTATO_FIELD_CLASS = 19
-	FARM_CLASS = 20
 	VILLAGE_SCHOOL_CLASS = 21
 	SUGARCANE_FIELD_CLASS = 22
-	BRICKYARD_CLASS = 24
 	CLAY_PIT_CLASS = 25
 	DISTILLERY_CLASS = 26
 	IRON_MINE_CLASS = 28
