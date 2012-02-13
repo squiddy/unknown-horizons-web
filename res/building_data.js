@@ -99,5 +99,25 @@ var BUILDINGS = {
 	35: {
 		size_x: 3, size_y: 3,
 		textures: ['settlers/salt_ponds/as_saltponds/idle/45']
+	},
+	// potato field
+	19: {
+		size_x: 3, size_y: 3,
+		textures: ['pioneers/agricultural/as_potatofield/idle/45']
+	},
+	// boatbuilder
+	12: {
+		size_x: 3, size_y: 3,
+		textures: ['pioneers/boat_builder/as_boat_builder/idle/45']
+	},
+	// weaver
+	7: {
+		size_x: 3, size_y: 3,
+		textures: ['pioneers/weaver/as_weaver/idle/45']
+	},
+	// sugarcane field
+	22: {
+		size_x: 3, size_y: 3,
+		textures: ['pioneers/agricultural/as_sugarfield/idle/45']
 	}
 };
