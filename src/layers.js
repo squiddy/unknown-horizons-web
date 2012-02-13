@@ -65,7 +65,7 @@ StreetLayer.prototype.calculate_roads = function() {
 }
 
 StreetLayer.prototype.render_street = function(tile_x, tile_y, type) {
-	var tex = building_sprites['sailors/streets/as_trail/' + type + '/45'];
+	var tex = texture_manager.get('sailors/streets/as_trail/' + type + '/45');
 
 	// why?
 	tile_x -= 1;
@@ -75,9 +75,11 @@ StreetLayer.prototype.render_street = function(tile_x, tile_y, type) {
 		x = coords[0], y = coords[1];
 
 	y += TILE_HEIGHT / 2;
-	y -= tex.height * scale;
+	y -= tex.info.height * scale;
 
-	this.ctx.drawImage(building_texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
+	this.ctx.drawImage(tex.image,
+		tex.info.xpos, tex.info.ypos, tex.info.width, tex.info.height,
+		x, y, tex.info.width * scale, tex.info.height * scale);
 }
 
 StreetLayer.prototype.check_street = function(x, y) {
@@ -105,7 +107,6 @@ StreetLayer.prototype.render = function() {
 
 
 function WaterLayer(canvas) {
-	this.texture = sprites['deep/straight/45'];
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
 	this.clear();
@@ -115,20 +116,22 @@ WaterLayer.prototype = new Layer();
 WaterLayer.prototype.constructor = WaterLayer;
 
 WaterLayer.prototype.render = function() {
+	var tex = texture_manager.get('deep/straight/45');
+
 	for (var i = -1; i < 16; i++) {
 		for (var j = -1; j < 16; j++) {
-			var x = j * this.texture.width * scale,
-				y = i * this.texture.height * scale;
+			var x = j * tex.info.width * scale,
+				y = i * tex.info.height * scale;
 
-			this.ctx.drawImage(base_texture,
-				this.texture.xpos, this.texture.ypos, this.texture.width, this.texture.height,
-				x, y, this.texture.width * scale, this.texture.height * scale);
+			this.ctx.drawImage(tex.image,
+				tex.info.xpos, tex.info.ypos, tex.info.width, tex.info.height,
+				x, y, tex.info.width * scale, tex.info.height * scale);
 
-			x += this.texture.width * scale / 2;
-			y += this.texture.height * scale / 2;
-			this.ctx.drawImage(base_texture,
-				this.texture.xpos, this.texture.ypos, this.texture.width, this.texture.height,
-				x, y, this.texture.width * scale, this.texture.height * scale);
+			x += tex.info.width * scale / 2;
+			y += tex.info.height * scale / 2;
+			this.ctx.drawImage(tex.image,
+				tex.info.xpos, tex.info.ypos, tex.info.width, tex.info.height,
+				x, y, tex.info.width * scale, tex.info.height * scale);
 		}
 	}
 
@@ -151,12 +154,12 @@ IslandLayer.prototype.render = function() {
 			tile_y = this.island[i][1],
 			tile_type = this.island[i][2];
 
-		var tex = sprites[TILE_TEXTURE[tile_type] + '/' + this.island[i][3] + '/' + this.island[i][4]];
+		var tex = texture_manager.get(TILE_TEXTURE[tile_type] + '/' + this.island[i][3] + '/' + this.island[i][4]);
 
 		var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
 			x = coords[0], y = coords[1] + TILE_HEIGHT / 2;
 
-		this.ctx.drawImage(base_texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, TILE_WIDTH, TILE_HEIGHT);
+		this.ctx.drawImage(tex.image, tex.info.xpos, tex.info.ypos, tex.info.width, tex.info.height, x, y, TILE_WIDTH, TILE_HEIGHT);
 	}
 }
 
@@ -211,17 +214,11 @@ BuildingLayer.prototype.render_building = function(building) {
 	}
 
 	var tex_name = info.textures[Math.floor(Math.random() * info.textures.length)];
-	var tex = nature_sprites[tex_name];
-	var texture = nature_texture;
+	var tex = texture_manager.get(tex_name);
 
-	if (tex === undefined) {
-		console.log(tex_name + ' not found in nature, trying buildings');
-		tex = building_sprites[tex_name];
-		texture = building_texture;
-		if (tex === undefined) {
-			console.log(tex_name + ' not found in buildings');
-			return;
-		}
+	if (tex === null) {
+		console.log('Texture ' + tex_name + ' not found');
+		return;
 	}
 
 	// why?
@@ -235,9 +232,11 @@ BuildingLayer.prototype.render_building = function(building) {
 		x = coords[0], y = coords[1];
 
 	y += info.size_y * TILE_HEIGHT / 2;
-	y -= tex.height * scale;
+	y -= tex.info.height * scale;
 
-	this.ctx.drawImage(texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
+	this.ctx.drawImage(tex.image,
+		tex.info.xpos, tex.info.ypos, tex.info.width, tex.info.height,
+		x, y, tex.info.width * scale, tex.info.height * scale);
 }
 
 BuildingLayer.prototype.render = function() {

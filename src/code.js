@@ -8,7 +8,8 @@ var background_ctx,
 	street_layer,
 	island_layer,
 	grid_layer,
-	building_layer;
+	building_layer,
+	texture_manager;
 
 TILE_WIDTH *= scale;
 TILE_HEIGHT *= scale;
@@ -71,7 +72,11 @@ function init() {
 	canvas.height = document.height * 2;
 	street_layer = new StreetLayer(canvas, map['buildings'], map['islands'][0]['grounds']);
 
-	load_assets();
+	texture_manager = new TextureManager();
+	texture_manager.add('res/textures/base.png', sprites);
+	texture_manager.add('res/textures/nature.png', nature_sprites);
+	texture_manager.add('res/textures/building.png', building_sprites);
+	texture_manager.load(pre_draw);
 
 	$('input[name=grid]').change(function() {
 		DEBUG = $(this).is(':checked');
@@ -87,28 +92,6 @@ function init() {
 		var coords = Grid.ScreenToMapCoordinates(e.pageX, e.pageY);
 		$('#coords').html(coords[0] + ':' + coords[1]);
 	});
-}
-
-function load_assets() {
-	var loaded = 0;
-	function ready() {
-		loaded++;
-		if (loaded == 3) {
-			pre_draw();
-		}
-	}
-
-	base_texture = new Image();
-	base_texture.src = 'res/textures/base.png'
-	base_texture.onload = ready;
-
-	nature_texture = new Image();
-	nature_texture.src = 'res/textures/nature.png'
-	nature_texture.onload = ready;
-
-	building_texture = new Image();
-	building_texture.src = 'res/textures/building.png'
-	building_texture.onload = ready;
 }
 
 function pre_draw() {
