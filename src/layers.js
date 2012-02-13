@@ -38,8 +38,8 @@ StreetLayer.prototype.render_street = function(building) {
 	tile_x -= 1;
 	tile_y += 1;
 
-	var x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2,
-		y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2;
+	var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
+		x = coords[0], y = coords[1];
 
 	if (DEBUG) this.highlight_tile(x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
 
@@ -107,8 +107,8 @@ IslandLayer.prototype.render = function() {
 
 		var tex = sprites[TILE_TEXTURE[tile_type] + '/' + this.island[i][3] + '/' + this.island[i][4]];
 
-		var x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2,
-			y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2 + TILE_HEIGHT / 2;
+		var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
+			x = coords[0], y = coords[1] + TILE_HEIGHT / 2;
 
 		this.ctx.drawImage(base_texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, TILE_WIDTH, TILE_HEIGHT);
 	}
@@ -182,8 +182,8 @@ BuildingLayer.prototype.render_building = function(building) {
 	tile_x -= 1;
 	tile_y += 1;
 
-	var x = origin.x + (tile_x + tile_y) * TILE_WIDTH / 2,
-		y = origin.y + (tile_y - tile_x) * TILE_HEIGHT / 2;
+	var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
+		x = coords[0], y = coords[1];
 
 	if (DEBUG) this.highlight_tile(x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
 	if (DEBUG) this.highlight_tile(x, y, info.size_x, info.size_y, 'rgba(255, 255, 0, 0.5)');

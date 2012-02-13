@@ -17,6 +17,21 @@ var origin = {x: 0, y: document.height},
 	DEBUG = false;
 
 
+var Grid = {
+	ScreenToMapCoordinates: function(x, y) {
+		y -= origin.y;
+		var mx = Math.floor(x / TILE_WIDTH - y / TILE_HEIGHT),
+			my = Math.floor(x / TILE_WIDTH + y / TILE_HEIGHT);
+		return [mx, my];
+	},
+	MapToScreenCoordinates: function(x, y) {
+		var sx = origin.x + (x + y) * TILE_WIDTH / 2,
+			sy = origin.y + (y - x) * TILE_HEIGHT / 2;
+		return [sx, sy];
+	}
+};
+
+
 $(document).ready(init);
 
 
@@ -66,6 +81,11 @@ function init() {
 		if (DEBUG) grid_layer.render();
 		street_layer.render();
 		building_layer.render();
+	});
+
+	$('canvas').mousemove(function(e) {
+		var coords = Grid.ScreenToMapCoordinates(e.pageX, e.pageY);
+		$('#coords').html(coords[0] + ':' + coords[1]);
 	});
 }
 
