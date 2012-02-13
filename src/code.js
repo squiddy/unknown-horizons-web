@@ -69,7 +69,7 @@ function init() {
 	canvas = document.getElementById('streets');
 	canvas.width = document.width * 2;
 	canvas.height = document.height * 2;
-	street_layer = new StreetLayer(canvas, map['buildings']);
+	street_layer = new StreetLayer(canvas, map['buildings'], map['islands'][0]['grounds']);
 
 	load_assets();
 

@@ -5,6 +5,11 @@ Layer.prototype.clear = function() {
 }
 
 Layer.prototype.highlight_tile = function(x, y, width, height, color) {
+	var coords = Grid.MapToScreenCoordinates(x, y);
+	
+	x = coords[0];
+	y = coords[1];
+
 	this.ctx.beginPath();
 	this.ctx.fillStyle = color;
 	this.ctx.moveTo(x,                          y);
@@ -16,23 +21,51 @@ Layer.prototype.highlight_tile = function(x, y, width, height, color) {
 }
 
 
-function StreetLayer(canvas, buildings) {
+function StreetLayer(canvas, buildings, island) {
 	this.buildings = buildings;
+	this.island = island;
+	this.island_bbox = {width: 0, height: 0};
+	this.roadmap = undefined;
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
+
 	this.clear();
+	this.calculate_roads();
 }
 
 StreetLayer.prototype = new Layer();
 StreetLayer.prototype.constructor = StreetLayer;
 
-StreetLayer.prototype.render_street = function(building) {
-	var info = BUILDINGS[building[0]],
-		tile_x = building[1],
-		tile_y = building[2];
+StreetLayer.prototype.calculate_roads = function() {
+	// get island bounding box
+	var xmin = 0, ymin = 0, xmax = 0, ymax = 0;
 
-	var tex_name = info.textures[Math.floor(Math.random() * info.textures.length)];
-	var tex = building_sprites[tex_name];
+	for (var i = 0, len = this.island.length; i < len; i++) {
+		var tile_x = this.island[i][0],
+			tile_y = this.island[i][1];
+
+		xmin = Math.min(xmin, tile_x); ymin = Math.min(ymin, tile_y);
+		xmax = Math.max(xmax, tile_x); ymax = Math.max(ymax, tile_y);
+	}
+
+	this.island_bbox.width = xmax - xmin;
+	this.island_bbox.height = ymax - ymin;
+
+	// fill roadmap
+	this.roadmap = new Uint8Array(new ArrayBuffer(this.island_bbox.width * this.island_bbox.height));
+
+	for (var i = 0, len = this.buildings.length; i < len; i++) {
+		if (this.buildings[i][0] === 15) {
+			var tile_x = this.buildings[i][1],
+				tile_y = this.buildings[i][2];
+
+			this.roadmap[tile_y * this.island_bbox.width + tile_x] = 1;
+		}
+	}
+}
+
+StreetLayer.prototype.render_street = function(tile_x, tile_y, type) {
+	var tex = building_sprites['sailors/streets/as_trail/' + type + '/45'];
 
 	// why?
 	tile_x -= 1;
@@ -41,18 +74,31 @@ StreetLayer.prototype.render_street = function(building) {
 	var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
 		x = coords[0], y = coords[1];
 
-	if (DEBUG) this.highlight_tile(x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
-
 	y += TILE_HEIGHT / 2;
 	y -= tex.height * scale;
 
 	this.ctx.drawImage(building_texture, tex.xpos, tex.ypos, tex.width, tex.height, x, y, tex.width * scale, tex.height * scale);
 }
 
+StreetLayer.prototype.check_street = function(x, y) {
+	return this.roadmap[y * this.island_bbox.width + x] == 1;
+}
+
 StreetLayer.prototype.render = function() {
-	for (var i = 0, len = this.buildings.length; i < len; i++) {
-		if (this.buildings[i][0] === 15) {
-			this.render_street(this.buildings[i]);
+	for (var i = 0, len = this.roadmap.length; i < len; i++) {
+		if (this.roadmap[i] === 1) {
+			var y = Math.floor(i / this.island_bbox.width),
+				x = i % this.island_bbox.width;
+
+			var a = this.check_street(x, y - 1) ? 'a' : '',
+				b = this.check_street(x + 1, y) ? 'b' : '',
+				c = this.check_street(x, y + 1) ? 'c' : '',
+				d = this.check_street(x - 1, y) ? 'd' : '',
+				type = [a, b, c, d].join('');
+
+			if (type !== '') {
+				this.render_street(x, y, type);
+			}
 		}
 	}
 }
@@ -182,11 +228,11 @@ BuildingLayer.prototype.render_building = function(building) {
 	tile_x -= 1;
 	tile_y += 1;
 
+	if (DEBUG) this.highlight_tile(tile_x, tile_y, 1, 1, 'rgba(255, 0, 0, 0.8)');
+	if (DEBUG) this.highlight_tile(tile_x, tile_y, info.size_x, info.size_y, 'rgba(255, 255, 0, 0.5)');
+
 	var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
 		x = coords[0], y = coords[1];
-
-	if (DEBUG) this.highlight_tile(x, y, 1, 1, 'rgba(255, 0, 0, 0.8)');
-	if (DEBUG) this.highlight_tile(x, y, info.size_x, info.size_y, 'rgba(255, 255, 0, 0.5)');
 
 	y += info.size_y * TILE_HEIGHT / 2;
 	y -= tex.height * scale;
