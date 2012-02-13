@@ -99,6 +99,10 @@ function init() {
 		var coords = Grid.ScreenToMapCoordinates(e.pageX, e.pageY);
 		$('#coords').html(coords[0] + ':' + coords[1]);
 	});
+
+	$('#toggle-menu').click(function() {
+		$('#main').toggle();
+	});
 }
 
 function pre_draw() {

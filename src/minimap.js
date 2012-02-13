@@ -23,7 +23,6 @@ function Minimap(map_canvas, view_canvas, map) {
 Minimap.prototype.clear = function() {
 	this.map_ctx.clearRect(0, 0, this.map_canvas.width, this.map_canvas.height);
 	this.view_ctx.clearRect(0, 0, this.view_canvas.width, this.view_canvas.height);
-	this.view_ctx.fillRect(0, 0, this.view_canvas.width, this.view_canvas.height);
 }
 
 Minimap.prototype.render_island = function(island) {

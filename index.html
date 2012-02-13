@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <style>
-        * { padding:0; margin:0; font-family:Helvetica, Arial, sans-serif; font-size:9px; font-weight: bold;}
-        html, body { overflow-x:hidden;overflow-y:hidden; }
+        * { padding:0; margin:0; font-family:Helvetica, Arial, sans-serif; font-size:9px; font-weight: bold; user-select:none;-webkit-user-select: none; }
+        html, body { overflow-x:hidden;overflow-y:hidden; cursor:url(res/cursor.png), auto; }
         canvas { display:block; position:absolute; }
         #background { z-index:0; }
         #streets { z-index:1; }
         #foreground { z-index:2; }
 
-        #hud { position:fixed; top:20px; right:20px; z-index:999; display:none; }
+        #hud { position:fixed; top:20px; right:20px; z-index:999; display:none; width:251px;}
         #minimap { z-index:999; margin:0 auto; width:208px; height:210px; background:url(res/hud/minimap.png); }
         #minimap-display { position:relative; top:45px; left:46px; width:120px; height:120px; opacity: 0.6; z-index: 998; }
         #minimap-view { position:relative; top:-75px; left:46px; width:120px; height:120px; opacity: 0.6; z-index: 999; }
@@ -36,9 +36,13 @@
         #logo {
             position:fixed;
             bottom:30px;
-            right:50px;
+            right:20px;
             z-index:999;
-            width:150px;
+            width:251px;
+            text-align:center;
+            color:white;
+            font-size:20px;
+            text-shadow: 2px 2px 3px #000;
         }
 
         #loading {
@@ -49,17 +53,38 @@
             height:100%;
             width:100%;
         }
+
+        .button {
+            background:url(res/hud/button_small.png);
+            width:34px;
+            height:40px;
+            text-align:center;
+            font-size:20px;
+            line-height:36px;
+            vertical-align:middle;
+            color:rgb(124, 115, 100);
+        }
+
+        #toggle-menu {
+            position:absolute;
+            top:90px;
+            right:10px;
+        }
     </style>
 </head>
 <body>
     <div id="loading"></div>
-    <img src="res/uh_logo.svg" id="logo" />
+    <div id="logo">
+        <img src="res/uh_logo.svg" style="width:150px;" /><br />
+        Canvas Map Viewer
+    </div>
     <div id="hud">
+        <div class="button" id="toggle-menu">D</div>
         <div id="minimap">
             <canvas id="minimap-display"></canvas>
             <canvas id="minimap-view"></canvas>
         </div>
-        <div id="main">
+        <div id="main" style="display:none;">
             <div id="content">
                 <hr style="margin:5px 0;"/>
                 <p id="coords">0:0</p>
