@@ -9,7 +9,8 @@ var background_ctx,
 	island_layer,
 	grid_layer,
 	building_layer,
-	texture_manager;
+	texture_manager,
+	minimap;
 
 TILE_WIDTH *= scale;
 TILE_HEIGHT *= scale;
@@ -78,6 +79,9 @@ function init() {
 	texture_manager.add('res/textures/building.png', building_sprites);
 	texture_manager.load(pre_draw);
 
+	canvas = document.getElementById('minimap-display');
+	minimap = new Minimap(canvas, map);
+
 	$('input[name=grid]').change(function() {
 		DEBUG = $(this).is(':checked');
 
@@ -101,6 +105,7 @@ function pre_draw() {
 	if (DEBUG) grid_layer.render();
 	street_layer.render();
 	building_layer.render();
+	minimap.render();
 
 	draw();
 }
