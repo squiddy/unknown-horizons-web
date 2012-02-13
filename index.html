@@ -10,7 +10,7 @@
         #streets { z-index:1; }
         #foreground { z-index:2; }
 
-        #hud { position:fixed; top:20px; right:20px; z-index:999; }
+        #hud { position:fixed; top:20px; right:20px; z-index:999; display:none; }
         #minimap { z-index:999; margin:0 auto; width:208px; height:210px; background:url(res/hud/minimap.png); }
         #minimap-display { position:relative; top:45px; left:46px; width:120px; height:120px; opacity: 0.6;}
 
@@ -39,9 +39,19 @@
             z-index:999;
             width:150px;
         }
+
+        #loading {
+            position:absolute;
+            background-image:url(res/menu/loading.png), url(res/menu/bg.png);
+            background-position:center center;
+            background-repeat:no-repeat;
+            height:100%;
+            width:100%;
+        }
     </style>
 </head>
 <body>
+    <div id="loading"></div>
     <img src="res/uh_logo.svg" id="logo" />
     <div id="hud">
         <div id="minimap">

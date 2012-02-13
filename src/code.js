@@ -101,6 +101,9 @@ function init() {
 }
 
 function pre_draw() {
+	$('#loading').hide();
+	$('#hud').show();
+
 	// draw once
 	water_layer.render();
 	island_layer.render();
