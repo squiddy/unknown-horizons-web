@@ -47,7 +47,10 @@ Island.prototype.check_street = function(x, y) {
 function Map(data) {
 	this.data = data;
 	this.islands = [];
+	this.bbox = {width: 0, height: 0};
+
 	this.load();
+	this.calculate_bounding_box();
 }
 
 Map.prototype.load = function() {
@@ -60,4 +63,18 @@ Map.prototype.load = function() {
 
 		this.islands.push(new Island(this, data.x, data.y, data.grounds));
 	}
+}
+
+Map.prototype.calculate_bounding_box = function() {
+	var xmin = 0, ymin = 0, xmax = 0, ymax = 0;
+
+	for (var i = 0, len = this.islands.length; i < len; i++) {
+		var island = this.islands[i];
+
+		xmin = Math.min(xmin, island.x); ymin = Math.min(ymin, island.y);
+		xmax = Math.max(xmax, island.x + island.bbox.height); ymax = Math.max(ymax, island.y + island.bbox.height);
+	}
+
+	this.bbox.width = xmax - xmin;
+	this.bbox.height = ymax - ymin;
 }

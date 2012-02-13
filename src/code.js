@@ -52,23 +52,27 @@ function init() {
 
 	map = new Map(map_data);
 
+	var dwidth = map.bbox.width * TILE_WIDTH,
+		dheight = map.bbox.height * TILE_HEIGHT;
+
 	var canvas = document.getElementById('background');
-	canvas.width = document.width * 2;
-	canvas.height = document.height * 2;
+	canvas.width = dwidth;
+	canvas.height = dheight;
 
 	water_layer = new WaterLayer(canvas);
 	island_layer = new IslandLayer(canvas, map);
 
 	canvas = document.getElementById('foreground');
-	canvas.width = document.width * 2;
-	canvas.height = document.height * 2;
+	canvas.width = dwidth;
+	canvas.height = dheight;
 
 	grid_layer = new GridLayer(canvas);
 	building_layer = new BuildingLayer(canvas, map);
 
 	canvas = document.getElementById('streets');
-	canvas.width = document.width * 2;
-	canvas.height = document.height * 2;
+	canvas.width = dwidth;
+	canvas.height = dheight;
+
 	street_layer = new StreetLayer(canvas, map);
 
 	texture_manager = new TextureManager();

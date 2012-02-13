@@ -83,10 +83,12 @@ WaterLayer.prototype = new Layer();
 WaterLayer.prototype.constructor = WaterLayer;
 
 WaterLayer.prototype.render = function() {
-	var tex = texture_manager.get('deep/straight/45');
+	var tex = texture_manager.get('deep/straight/45'),
+		xi = Math.floor(this.canvas.width / tex.info.width * scale) + 1,
+		yi = Math.floor(this.canvas.height / tex.info.height * scale) + 1;
 
-	for (var i = -1; i < 16; i++) {
-		for (var j = -1; j < 16; j++) {
+	for (var i = -1; i < xi; i++) {
+		for (var j = -1; j < yi; j++) {
 			var x = j * tex.info.width * scale,
 				y = i * tex.info.height * scale;
 
