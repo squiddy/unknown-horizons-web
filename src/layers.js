@@ -24,8 +24,6 @@ Layer.prototype.highlight_tile = function(x, y, width, height, color) {
 function StreetLayer(canvas, map) {
 	this.map = map;
 	this.buildings = map.buildings;
-	this.island = this.map.islands[0];
-	this.roadmap = undefined;
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
 
@@ -54,15 +52,15 @@ StreetLayer.prototype.render_street = function(tile_x, tile_y, type) {
 }
 
 StreetLayer.prototype.render = function() {
-	for (var i = 0, len = this.island.roadmap.length; i < len; i++) {
-		if (this.island.roadmap[i] === 1) {
-			var y = Math.floor(i / this.island.bbox.width),
-				x = i % this.island.bbox.width;
+	for (var i = 0, len = this.map.roadmap.length; i < len; i++) {
+		if (this.map.roadmap[i] === 1) {
+			var y = Math.floor(i / this.map.bbox.width),
+				x = i % this.map.bbox.width;
 
-			var a = this.island.check_street(x, y - 1) ? 'a' : '',
-				b = this.island.check_street(x + 1, y) ? 'b' : '',
-				c = this.island.check_street(x, y + 1) ? 'c' : '',
-				d = this.island.check_street(x - 1, y) ? 'd' : '',
+			var a = this.map.check_street(x, y - 1) ? 'a' : '',
+				b = this.map.check_street(x + 1, y) ? 'b' : '',
+				c = this.map.check_street(x, y + 1) ? 'c' : '',
+				d = this.map.check_street(x - 1, y) ? 'd' : '',
 				type = [a, b, c, d].join('');
 
 			if (type !== '') {
@@ -109,7 +107,6 @@ WaterLayer.prototype.render = function() {
 
 function IslandLayer(canvas, map) {
 	this.map = map;
-	this.island = this.map.islands[0];
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
 	this.clear();
@@ -118,18 +115,24 @@ function IslandLayer(canvas, map) {
 IslandLayer.prototype = new Layer();
 IslandLayer.prototype.constructor = IslandLayer;
 
-IslandLayer.prototype.render = function() {
-	for (var i = 0, len = this.island.grounds.length; i < len; i++) {
-		var tile_x = this.island.grounds[i][0],
-			tile_y = this.island.grounds[i][1],
-			tile_type = this.island.grounds[i][2];
+IslandLayer.prototype.render_island = function(island) {
+	for (var i = 0, len = island.grounds.length; i < len; i++) {
+		var tile_x = island.grounds[i][0],
+			tile_y = island.grounds[i][1],
+			tile_type = island.grounds[i][2];
 
-		var tex = texture_manager.get(TILE_TEXTURE[tile_type] + '/' + this.island.grounds[i][3] + '/' + this.island.grounds[i][4]);
+		var tex = texture_manager.get(TILE_TEXTURE[tile_type] + '/' + island.grounds[i][3] + '/' + island.grounds[i][4]);
 
-		var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
+		var coords = Grid.MapToScreenCoordinates(tile_x + island.x, tile_y + island.y),
 			x = coords[0], y = coords[1] + TILE_HEIGHT / 2;
 
 		this.ctx.drawImage(tex.image, tex.info.xpos, tex.info.ypos, tex.info.width, tex.info.height, x, y, TILE_WIDTH, TILE_HEIGHT);
+	}
+}
+
+IslandLayer.prototype.render = function() {
+	for (var i = 0, len = this.map.islands.length; i < len; i++) {
+		this.render_island(this.map.islands[i]);
 	}
 }
 

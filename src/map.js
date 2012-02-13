@@ -4,11 +4,7 @@ function Island(map, x, y, grounds) {
 	this.y = y;
 	this.grounds = grounds;
 	this.bbox = {width: 0, height: 0};
-	this.roadmap = null;
-
-	this.STREET_TYPE = 15;
 	this.calculate_bounding_box()
-	this.calculate_roadmap()
 }
 
 Island.prototype.calculate_bounding_box = function() {
@@ -26,31 +22,16 @@ Island.prototype.calculate_bounding_box = function() {
 	this.bbox.height = ymax - ymin;
 }
 
-Island.prototype.calculate_roadmap = function() {
-	this.roadmap = new Uint8Array(new ArrayBuffer(this.bbox.width * this.bbox.height));
-
-	for (var i = 0, len = this.map.buildings.length; i < len; i++) {
-		if (this.map.buildings[i][0] === this.STREET_TYPE) {
-			var tile_x = this.map.buildings[i][1],
-				tile_y = this.map.buildings[i][2];
-
-			this.roadmap[tile_y * this.bbox.width + tile_x] = 1;
-		}
-	}
-}
-
-Island.prototype.check_street = function(x, y) {
-	return this.roadmap[y * this.bbox.width + x] == 1;
-}
-
-
 function Map(data) {
 	this.data = data;
 	this.islands = [];
 	this.bbox = {width: 0, height: 0};
+	this.roadmap = null;
+	this.STREET_TYPE = 15;
 
 	this.load();
 	this.calculate_bounding_box();
+	this.calculate_roadmap()
 }
 
 Map.prototype.load = function() {
@@ -77,4 +58,21 @@ Map.prototype.calculate_bounding_box = function() {
 
 	this.bbox.width = xmax - xmin;
 	this.bbox.height = ymax - ymin;
+}
+
+Map.prototype.calculate_roadmap = function() {
+	this.roadmap = new Uint8Array(new ArrayBuffer(this.bbox.width * this.bbox.height));
+
+	for (var i = 0, len = this.buildings.length; i < len; i++) {
+		if (this.buildings[i][0] === this.STREET_TYPE) {
+			var tile_x = this.buildings[i][1],
+				tile_y = this.buildings[i][2];
+
+			this.roadmap[tile_y * this.bbox.width + tile_x] = 1;
+		}
+	}
+}
+
+Map.prototype.check_street = function(x, y) {
+	return this.roadmap[y * this.bbox.width + x] == 1;
 }
