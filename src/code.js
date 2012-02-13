@@ -38,15 +38,10 @@ $(document).ready(init);
 
 
 function init_stats() {
-    var el, stats;
+    var stats;
 
     stats = new Stats();
-    el = stats.getDomElement();
-    el.style.position = 'fixed';
-    el.style.left = '0px';
-    el.style.top = '0px';
-
-    document.body.appendChild(el);
+    $('#content').prepend(stats.getDomElement());
 
     setInterval(stats.update, 1000 / 60);
 }

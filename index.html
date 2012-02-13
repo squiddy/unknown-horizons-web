@@ -8,26 +8,41 @@
         #background { z-index:0; }
         #streets { z-index:1; }
         #foreground { z-index:2; }
-        #tools { position:fixed; top:60px; left:0; z-index:999;
-                 width:80px; background:rgb(8,8,24);
-                 color:rgb(0, 255, 255); line-height:1.2em; opacity:0.9; }
-        #tools div { padding:0 0 3px 3px;}
 
         #hud { position:fixed; top:20px; right:20px; z-index:999; }
-        #minimap { width:208px; height:210px; background:url(res/hud/minimap.png); }
+        #minimap { z-index:999; margin:0 auto; width:208px; height:210px; background:url(res/hud/minimap.png); }
         #minimap-display { position:relative; top:45px; left:46px; width:120px; height:120px; opacity: 0.6;}
+
+        #main {
+            background-image:url(res/hud/main_bg_top.png), url(res/hud/main_bg_bottom.png);
+            background-position:center top, center bottom;
+            background-repeat:no-repeat;
+            padding-top:60px;
+            padding-bottom:88px;
+            width:251px;
+            position:relative;
+            top:-52px;
+            z-index:998;
+        }
+
+        #main #content {
+            background-image:url(res/hud/main_bg_fill.png);
+            padding-left:30px;
+            padding-right:30px;
+        }
     </style>
 </head>
 <body>
-    <div id="tools">
-        <div>
-            <p id="coords">0:0</p>
-            <label><input type="checkbox" name="grid" /> Grid</label>
-        </div>
-    </div>
     <div id="hud">
         <div id="minimap">
             <canvas id="minimap-display"></canvas>
+        </div>
+        <div id="main">
+            <div id="content">
+                <hr style="margin:5px 0;"/>
+                <p id="coords">0:0</p>
+                <label><input type="checkbox" name="grid" /> Grid</label>
+            </div>
         </div>
     </div>
     <canvas id="background"></canvas>
