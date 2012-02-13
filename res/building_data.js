@@ -112,12 +112,17 @@ var BUILDINGS = {
 	},
 	// weaver
 	7: {
-		size_x: 3, size_y: 3,
+		size_x: 2, size_y: 2,
 		textures: ['pioneers/weaver/as_weaver/idle/45']
 	},
 	// sugarcane field
 	22: {
 		size_x: 3, size_y: 3,
 		textures: ['pioneers/agricultural/as_sugarfield/idle/45']
+	},
+	// destillery
+	22: {
+		size_x: 2, size_y: 2,
+		textures: ['pioneers/distillery/as_distillery/idle/45']
 	}
 };
