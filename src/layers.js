@@ -176,7 +176,8 @@ BuildingLayer.prototype.constructor = BuildingLayer;
 BuildingLayer.prototype.render_building = function(building) {
 	var tile_type = building[0],
 		tile_x = building[1],
-		tile_y = building[2];
+		tile_y = building[2],
+		level = building[3];
 
 	var info = BUILDINGS[tile_type];
 	if (info === undefined) {
@@ -184,7 +185,12 @@ BuildingLayer.prototype.render_building = function(building) {
 		return;
 	}
 
-	var tex_name = info.textures[Math.floor(Math.random() * info.textures.length)];
+	if (tile_type === 3) {
+		var tex_name = info.textures[level][Math.floor(Math.random() * info.textures[level].length)];
+	} else {
+		var tex_name = info.textures[Math.floor(Math.random() * info.textures.length)];
+	}
+	
 	var tex = texture_manager.get(tex_name);
 
 	if (tex === null) {

@@ -38,7 +38,21 @@ var BUILDINGS = {
 	// pioneer hut
 	3: {
 		size_x: 2, size_y: 2,
-	 	textures: ['pioneers/residential/as_hut/idle/45']
+	 	textures: [
+		[
+			'sailors/residential/as_tent/idle/45',
+			'sailors/residential/as_tent1/idle/45',
+			'sailors/residential/as_tent2/idle/45',
+			'sailors/residential/as_tent3/idle/45',
+			'sailors/residential/as_tent4/idle/45',
+			'sailors/residential/as_tent5/idle/45'
+		], [
+			'pioneers/residential/as_hut/idle/45',
+			'pioneers/residential/as_hut1/idle/45',
+			'pioneers/residential/as_hut2/idle/45',
+		],[
+			'settlers/residential/as_house/idle/45'
+		]]
 	},
 	// fisherman
 	11: {

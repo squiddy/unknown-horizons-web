@@ -15,7 +15,7 @@ db = sqlite3.connect(sys.argv[1])
 cursor = db.cursor()
 
 # retrieve buildings
-cursor.execute('SELECT type, x, y FROM building ORDER BY x DESC, y ASC')
+cursor.execute('SELECT type, x, y, level FROM building ORDER BY x DESC, y ASC')
 result = cursor.fetchall()
 
 def s(a, b):
