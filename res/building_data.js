@@ -121,8 +121,23 @@ var BUILDINGS = {
 		textures: ['pioneers/agricultural/as_sugarfield/idle/45']
 	},
 	// destillery
-	22: {
+	26: {
 		size_x: 2, size_y: 2,
 		textures: ['pioneers/distillery/as_distillery/idle/45']
+	},
+	// iron mine
+	28: {
+		size_x: 2, size_y: 2,
+		textures: ['']
+	},
+	// charcoal burner
+	31: {
+		size_x: 2, size_y: 3,
+		textures: ['settlers/charcoal_burning/as_charcoal_burning/idle/45']
+	},
+	// clay pit
+	25: {
+		size_x: 3, size_y: 3,
+		textures: ['pioneers/clay_pit/as_clay_pit/idle/45']
 	}
 };
