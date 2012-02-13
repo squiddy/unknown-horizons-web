@@ -82,7 +82,8 @@ function init() {
 	texture_manager.load(pre_draw);
 
 	canvas = document.getElementById('minimap-display');
-	minimap = new Minimap(canvas, map);
+	canvas2 = document.getElementById('minimap-view');
+	minimap = new Minimap(canvas, canvas2, map);
 
 	$('input[name=grid]').change(function() {
 		DEBUG = $(this).is(':checked');
@@ -110,11 +111,12 @@ function pre_draw() {
 	if (DEBUG) grid_layer.render();
 	street_layer.render();
 	building_layer.render();
-	minimap.render();
+	minimap.render_once();
 
 	draw();
 }
 
 function draw() {
+	minimap.render();
 	webkitRequestAnimationFrame(draw);
 }

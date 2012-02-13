@@ -12,7 +12,8 @@
 
         #hud { position:fixed; top:20px; right:20px; z-index:999; display:none; }
         #minimap { z-index:999; margin:0 auto; width:208px; height:210px; background:url(res/hud/minimap.png); }
-        #minimap-display { position:relative; top:45px; left:46px; width:120px; height:120px; opacity: 0.6;}
+        #minimap-display { position:relative; top:45px; left:46px; width:120px; height:120px; opacity: 0.6; z-index: 998; }
+        #minimap-view { position:relative; top:-75px; left:46px; width:120px; height:120px; opacity: 0.6; z-index: 999; }
 
         #main {
             background-image:url(res/hud/main_bg_top.png), url(res/hud/main_bg_bottom.png);
@@ -56,6 +57,7 @@
     <div id="hud">
         <div id="minimap">
             <canvas id="minimap-display"></canvas>
+            <canvas id="minimap-view"></canvas>
         </div>
         <div id="main">
             <div id="content">
