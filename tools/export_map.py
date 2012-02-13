@@ -45,7 +45,7 @@ for (x, y, filename) in cursor.fetchall():
 db.close()
 
 with open(sys.argv[2], 'w') as output:
-    output.write('var map = ')
+    output.write('var map_data = ')
     output.write(json.dumps(data))
     output.write(';')
 

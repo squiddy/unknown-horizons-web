@@ -10,18 +10,17 @@ Minimap.prototype.clear = function() {
 }
 
 Minimap.prototype.render = function() {
-	var island = this.map.islands[0]['grounds'],
-		bbox = street_layer.island_bbox,
+	var island = this.map.islands[0],
 		offset = 10,
-		tw = (this.canvas.width - 2 * offset) / bbox.width,
-		th = (this.canvas.height - 2 * offset) / bbox.height;
+		tw = (this.canvas.width - 2 * offset) / island.bbox.width,
+		th = (this.canvas.height - 2 * offset) / island.bbox.height;
 
 	this.ctx.fillStyle = 'rgb(124, 115, 100)';
 
-	for (var i = 0, len = island.length; i < len; i++) {
-		var tile_x = island[i][0],
-			tile_y = island[i][1],
-			tile_type = island[i][2];
+	for (var i = 0, len = island.grounds.length; i < len; i++) {
+		var tile_x = island.grounds[i][0],
+			tile_y = island.grounds[i][1],
+			tile_type = island.grounds[i][2];
 
 		this.ctx.fillRect(tile_x * tw + offset, tile_y * th + offset, tw, th);
 	}

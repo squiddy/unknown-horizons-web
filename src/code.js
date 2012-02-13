@@ -10,7 +10,8 @@ var background_ctx,
 	grid_layer,
 	building_layer,
 	texture_manager,
-	minimap;
+	minimap,
+	map;
 
 TILE_WIDTH *= scale;
 TILE_HEIGHT *= scale;
@@ -49,24 +50,26 @@ function init_stats() {
 function init() {
 	init_stats();
 
+	map = new Map(map_data);
+
 	var canvas = document.getElementById('background');
 	canvas.width = document.width * 2;
 	canvas.height = document.height * 2;
 
 	water_layer = new WaterLayer(canvas);
-	island_layer = new IslandLayer(canvas, map['islands'][0]['grounds']);
+	island_layer = new IslandLayer(canvas, map);
 
 	canvas = document.getElementById('foreground');
 	canvas.width = document.width * 2;
 	canvas.height = document.height * 2;
 
 	grid_layer = new GridLayer(canvas);
-	building_layer = new BuildingLayer(canvas, map['buildings']);
+	building_layer = new BuildingLayer(canvas, map);
 
 	canvas = document.getElementById('streets');
 	canvas.width = document.width * 2;
 	canvas.height = document.height * 2;
-	street_layer = new StreetLayer(canvas, map['buildings'], map['islands'][0]['grounds']);
+	street_layer = new StreetLayer(canvas, map);
 
 	texture_manager = new TextureManager();
 	texture_manager.add('res/textures/base.png', sprites);

@@ -21,48 +21,19 @@ Layer.prototype.highlight_tile = function(x, y, width, height, color) {
 }
 
 
-function StreetLayer(canvas, buildings, island) {
-	this.buildings = buildings;
-	this.island = island;
-	this.island_bbox = {width: 0, height: 0};
+function StreetLayer(canvas, map) {
+	this.map = map;
+	this.buildings = map.buildings;
+	this.island = this.map.islands[0];
 	this.roadmap = undefined;
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
 
 	this.clear();
-	this.calculate_roads();
 }
 
 StreetLayer.prototype = new Layer();
 StreetLayer.prototype.constructor = StreetLayer;
-
-StreetLayer.prototype.calculate_roads = function() {
-	// get island bounding box
-	var xmin = 0, ymin = 0, xmax = 0, ymax = 0;
-
-	for (var i = 0, len = this.island.length; i < len; i++) {
-		var tile_x = this.island[i][0],
-			tile_y = this.island[i][1];
-
-		xmin = Math.min(xmin, tile_x); ymin = Math.min(ymin, tile_y);
-		xmax = Math.max(xmax, tile_x); ymax = Math.max(ymax, tile_y);
-	}
-
-	this.island_bbox.width = xmax - xmin;
-	this.island_bbox.height = ymax - ymin;
-
-	// fill roadmap
-	this.roadmap = new Uint8Array(new ArrayBuffer(this.island_bbox.width * this.island_bbox.height));
-
-	for (var i = 0, len = this.buildings.length; i < len; i++) {
-		if (this.buildings[i][0] === 15) {
-			var tile_x = this.buildings[i][1],
-				tile_y = this.buildings[i][2];
-
-			this.roadmap[tile_y * this.island_bbox.width + tile_x] = 1;
-		}
-	}
-}
 
 StreetLayer.prototype.render_street = function(tile_x, tile_y, type) {
 	var tex = texture_manager.get('sailors/streets/as_trail/' + type + '/45');
@@ -82,20 +53,16 @@ StreetLayer.prototype.render_street = function(tile_x, tile_y, type) {
 		x, y, tex.info.width * scale, tex.info.height * scale);
 }
 
-StreetLayer.prototype.check_street = function(x, y) {
-	return this.roadmap[y * this.island_bbox.width + x] == 1;
-}
-
 StreetLayer.prototype.render = function() {
-	for (var i = 0, len = this.roadmap.length; i < len; i++) {
-		if (this.roadmap[i] === 1) {
-			var y = Math.floor(i / this.island_bbox.width),
-				x = i % this.island_bbox.width;
+	for (var i = 0, len = this.island.roadmap.length; i < len; i++) {
+		if (this.island.roadmap[i] === 1) {
+			var y = Math.floor(i / this.island.bbox.width),
+				x = i % this.island.bbox.width;
 
-			var a = this.check_street(x, y - 1) ? 'a' : '',
-				b = this.check_street(x + 1, y) ? 'b' : '',
-				c = this.check_street(x, y + 1) ? 'c' : '',
-				d = this.check_street(x - 1, y) ? 'd' : '',
+			var a = this.island.check_street(x, y - 1) ? 'a' : '',
+				b = this.island.check_street(x + 1, y) ? 'b' : '',
+				c = this.island.check_street(x, y + 1) ? 'c' : '',
+				d = this.island.check_street(x - 1, y) ? 'd' : '',
 				type = [a, b, c, d].join('');
 
 			if (type !== '') {
@@ -138,8 +105,9 @@ WaterLayer.prototype.render = function() {
 }
 
 
-function IslandLayer(canvas, island) {
-	this.island = island;
+function IslandLayer(canvas, map) {
+	this.map = map;
+	this.island = this.map.islands[0];
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
 	this.clear();
@@ -149,12 +117,12 @@ IslandLayer.prototype = new Layer();
 IslandLayer.prototype.constructor = IslandLayer;
 
 IslandLayer.prototype.render = function() {
-	for (var i = 0, len = this.island.length; i < len; i++) {
-		var tile_x = this.island[i][0],
-			tile_y = this.island[i][1],
-			tile_type = this.island[i][2];
+	for (var i = 0, len = this.island.grounds.length; i < len; i++) {
+		var tile_x = this.island.grounds[i][0],
+			tile_y = this.island.grounds[i][1],
+			tile_type = this.island.grounds[i][2];
 
-		var tex = texture_manager.get(TILE_TEXTURE[tile_type] + '/' + this.island[i][3] + '/' + this.island[i][4]);
+		var tex = texture_manager.get(TILE_TEXTURE[tile_type] + '/' + this.island.grounds[i][3] + '/' + this.island.grounds[i][4]);
 
 		var coords = Grid.MapToScreenCoordinates(tile_x, tile_y),
 			x = coords[0], y = coords[1] + TILE_HEIGHT / 2;
@@ -192,8 +160,9 @@ GridLayer.prototype.render = function() {
 }
 
 
-function BuildingLayer(canvas, buildings) {
-	this.buildings = buildings;
+function BuildingLayer(canvas, map) {
+	this.map = map;
+	this.buildings = this.map.buildings;
 	this.canvas = canvas;
 	this.ctx = this.canvas.getContext('2d');
 	this.clear();
