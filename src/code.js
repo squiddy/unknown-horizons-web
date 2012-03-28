@@ -16,7 +16,7 @@ var background_ctx,
 TILE_WIDTH *= scale;
 TILE_HEIGHT *= scale;
 
-var origin = {x: 0, y: document.height},
+var origin = {x: 0, y: 0},
 	DEBUG = false;
 
 
@@ -49,6 +49,8 @@ function init_stats() {
 
 function init() {
 	init_stats();
+
+	origin.y = $(document).height();
 
 	map = new Map(map_data);
 
