@@ -124,6 +124,6 @@ function pre_draw() {
 
 function draw() {
 	// disabled, poor performance
-	// minimap.render();
-	webkitRequestAnimationFrame(draw);
+	//minimap.render();
+	//webkitRequestAnimationFrame(draw);
 }
