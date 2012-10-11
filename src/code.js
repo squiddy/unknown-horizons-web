@@ -48,7 +48,7 @@ function init_stats() {
 }
 
 function init() {
-	init_stats();
+	//init_stats();
 
 	origin.y = $(document).height();
 
