@@ -14,6 +14,8 @@ SpriteTexture.prototype.load = function() {
     return Promise.all([sheet, texture]).then(function(res) {
         this.sheet = res[0];
         this.texture = res[1];
+        this.width = this.sheet.meta.size.w;
+        this.height = this.sheet.meta.size.h;
         texLogger('Loaded ' + this.sheetUrl);
     }.bind(this));
 }
@@ -34,6 +36,14 @@ SpriteTexture.prototype.getFrame = function(name) {
         s1: (frame.x + frame.w) / width,
         t1: (frame.y + frame.h) / height,
     };
+};
+
+SpriteTexture.prototype.getFrame2 = function(name) {
+    if (this.sheet.frames[name] === undefined) {
+        throw new Error(name + ' not found in ' + this.sheetUrl);
+    }
+    
+    return this.sheet.frames[name].frame;
 };
 
 function loadImage(path) {

@@ -18,11 +18,18 @@ function main() {
 
     camera = new Camera(canvas);
     waterRenderer = new WaterRenderer();
+    
+    var sprite = new SpriteTexture('/data/gfx/terrain.png', '/data/gfx/terrain.json');
+    fixedRenderer = new FixedAnimationRenderer(sprite);
+    fixedRenderer.addObject({x: 20, y:140, width: 320, height: 320, frame: 'mountains/as_mine5x5/work/45/0.png'});
+    fixedRenderer.addObject({x: 140, y:40, width: 100, height: 100, frame: 'resources/as_fish0/idle/315/000.png'});
+    fixedRenderer.addObject({x: 260, y:40, width: 100, height: 100, frame: 'trees/as_birch0/idle_full/135/0.png'});
+
     mapRenderer = new MapRenderer();
     statusIconRenderer = new StatusIconRenderer();
 
     console.time('Main init');
-    var init = [waterRenderer.init(), statusIconRenderer.init(),
+    var init = [waterRenderer.init(), statusIconRenderer.init(), fixedRenderer.init(),
                 mapRenderer.load('/data/example_map.min.json')];
     Promise.all(init).then(function(res) {
         window.addEventListener('resize', resize);
@@ -54,6 +61,7 @@ function animate() {
     waterRenderer.render();
     mapRenderer.render();
     statusIconRenderer.render();
+    fixedRenderer.render();
 
     $('#frame-time').text((window.performance.now() - curFrame).toFixed(3) + 'ms');
     $('#pos').text('X: ' + camera.x + ' Y: ' + camera.y);
