@@ -1,8 +1,28 @@
-var icons = [
-    {x: 620, y: 20, icon: 'question_mark', frame: 0, maxFrame: 72},
-    {x: 700, y: 20, icon: 'pestilence', frame: 0, maxFrame: 72},
-    {x: 780, y: 20, icon: 'inventory_full', frame: 0, maxFrame: 72},
-];
+var icons = (function() {
+    var r = [];
+    var animations = [
+        ['inventory_full', 72],
+        ['mainsquare_access', 72], 
+        ['mine_gold', 72], 
+        ['pestilence', 72],
+        ['question_mark', 72],
+        ['attention_please', 17],
+        ['book_close', 10],
+        ['book_flip', 10],
+        ['book_open', 10],
+        ['decommissioned', 18]
+    ];
+    for (var x = 0; x < 60; x++) {
+        for (var y = 0; y < 60; y++) {
+            var a = animations[(x*y)%animations.length];
+            r.push({x: x * 70, y: y * 70, 
+                    icon: a[0],
+                    frame: parseInt(Math.random() * a[1]), maxFrame: a[1]});
+        }
+    }
+    return r;
+})();
+
 
 function StatusIconRenderer() {
     this.shader = null;
