@@ -60,5 +60,5 @@ function animate() {
 }
 
 function handleError(e) {
-    console.log('error', r.message, r.fileName, r.lineNumber);
+    console.log('error', e.message, e.fileName, e.lineNumber);
 }
