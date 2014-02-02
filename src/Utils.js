@@ -2,7 +2,8 @@ function initGL(canvas) {
     var gl = null;
 
     try {
-        gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+        gl = canvas.getContext("webgl", {alpha: false}) ||
+             canvas.getContext("experimental-webgl", {alpha: false});
     }
     catch(e) {}
   
