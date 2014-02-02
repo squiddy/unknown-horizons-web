@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="/lib/jquery-2.1.0.min.js"></script>
+  <script src="/lib/promise-0.1.1.min.js"></script>
+  <script src="/src/Utils.js"></script>
+  <script src="/src/Texture.js"></script>
+  <script src="/src/Camera.js"></script>
+  <script src="/src/Shader.js"></script>
+  <script src="/src/StatusIconRenderer.js"></script>
+  <script src="/src/MapRenderer.js"></script>
+  <script src="/src/WaterRenderer.js"></script>
+  <script src="/src/GroundRenderer.js"></script>
+  <script src="/src/main.js"></script>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #debug, canvas {
+      position: absolute;
+    }
+
+    #debug {
+      padding: 5px;
+      background: rgba(255,255,255,0.4);
+      top: 0;
+      right: 0;
+      width: 150px;
+    }
+
+    #debug span { display: block; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="640" height="480"></canvas>
+  <div id="debug">
+    <span id="frame-time"></span>
+    <span id="pos"></span>
+  </div>
+
+  <script>main();</script>
+</body>
+</html>
