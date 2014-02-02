@@ -18,13 +18,21 @@ function Shader(vertSource, fragSource) {
 Shader.prototype.initAttributes = function() {
     for (var i = 0; i < arguments.length; i++) {
         var name = arguments[i];
-        this.loc[name] = gl.getAttribLocation(this.program, name);
+        var loc = gl.getAttribLocation(this.program, name);
+        if (loc === -1) {
+            throw new Error('Failed to lookup attribute location for ' + name);
+        }
+        this.loc[name] = loc;
     }
 };
 
 Shader.prototype.initUniforms = function() {
     for (var i = 0; i < arguments.length; i++) {
         var name = arguments[i];
-        this.loc[name] = gl.getUniformLocation(this.program, name);
+        var loc = gl.getUniformLocation(this.program, name);
+        if (loc === -1) {
+            throw new Error('Failed to lookup uniform location for ' + name);
+        }
+        this.loc[name] = loc;
     }
 };
