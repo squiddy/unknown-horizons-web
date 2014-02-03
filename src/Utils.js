@@ -1,4 +1,4 @@
-function initGL(canvas) {
+export function initGL(canvas) {
     var gl = null;
 
     try {
@@ -14,7 +14,7 @@ function initGL(canvas) {
     return gl;
 }
 
-function logger(name) {
+export function logger(name) {
     return function() {
         var args = Array.prototype.slice.call(arguments);
         args.unshift(name + ':');
@@ -22,6 +22,11 @@ function logger(name) {
     }
 }
 
-function loadFile(url) {
+export function loadFile(url) {
     return Promise.cast($.get(url));
+}
+
+export function padZero(n, width) {
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }

@@ -1,3 +1,9 @@
+import { Camera } from 'src/Camera';
+import { initGL } from 'src/Utils';
+import { WaterRenderer } from 'src/WaterRenderer';
+import { MapRenderer } from 'src/MapRenderer';
+import { StatusIconRenderer } from 'src/StatusIconRenderer';
+
 var gl, mapRenderer, waterRenderer, camera, statusIconRenderer;
 
 function resize(event) {
